@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "cheatlikedefnot",
+  "version": "${version}",
+  "name": "Cheat Like Defnot",
+  "description": "For servers that want players to be able to cheat like defnot",
+  "authors": [
+    "Earthcomputer"
+  ],
+  "contact": {
+    "repo": "https://github.com/Earthcomputer/cheatlikedefnot"
+  },
+  "license": "MIT",
+  "icon": "assets/cheatlikedefnot/icon.png",
+  "environment": "*",
+  "entrypoints": {},
+  "mixins": [
+    "cheatlikedefnot.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "1.18.2"
+  }
+}
