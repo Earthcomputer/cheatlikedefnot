@@ -15,6 +15,8 @@ public class ServerPlayerInteractionManagerMixin {
 
     @Inject(method = "setGameMode", at = @At("RETURN"))
     protected void onSetGameMode(CallbackInfo ci) {
-        this.player.server.getPlayerManager().sendCommandTree(this.player);
+        if (this.player.networkHandler != null) { // can be null on server startup
+            this.player.server.getPlayerManager().sendCommandTree(this.player);
+        }
     }
 }
