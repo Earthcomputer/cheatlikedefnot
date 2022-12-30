@@ -4,7 +4,6 @@
   "package": "net.earthcomputer.cheatlikedefnot.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "LocateBiomeCommandMixin",
     "LocateCommandMixin",
     "ServerPlayerInteractionManagerMixin",
     "TeleportCommandMixin"
