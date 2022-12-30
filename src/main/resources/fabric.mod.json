@@ -17,6 +17,7 @@
   "mixins": [
     "cheatlikedefnot.mixins.json"
   ],
+  "accessWidener": "cheatlikedefnot.accesswidener",
   "depends": {
     "minecraft": ">=1.19"
   }
