@@ -13,12 +13,17 @@
   "license": "MIT",
   "icon": "assets/cheatlikedefnot/icon.png",
   "environment": "*",
-  "entrypoints": {},
+  "entrypoints": {
+    "main": [
+      "net.earthcomputer.cheatlikedefnot.CheatLikeDefnot"
+    ]
+  },
   "mixins": [
     "cheatlikedefnot.mixins.json"
   ],
   "accessWidener": "cheatlikedefnot.accesswidener",
   "depends": {
-    "minecraft": ">=1.19"
+    "minecraft": ">=1.19",
+    "fabric-api": "*"
   }
 }
