@@ -6,6 +6,7 @@
   "mixins": [
     "LocateCommandMixin",
     "ServerPlayerInteractionManagerMixin",
+    "ServerPlayNetworkHandlerMixin",
     "TeleportCommandMixin"
   ],
   "client": [

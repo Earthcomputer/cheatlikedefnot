@@ -19,7 +19,8 @@
     ]
   },
   "mixins": [
-    "cheatlikedefnot.mixins.json"
+    "cheatlikedefnot.mixins.json",
+    "cheatlikedefnot.compat.mixins.json"
   ],
   "accessWidener": "cheatlikedefnot.accesswidener",
   "depends": {
