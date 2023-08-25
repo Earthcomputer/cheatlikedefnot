@@ -1,4 +1,4 @@
-package net.earthcomputer.cheatlikedefnot.compat.tweakermore;
+package net.earthcomputer.cheatlikedefnot.compat.mixin.tweakermore;
 
 import net.earthcomputer.cheatlikedefnot.CheatLikeDefnot;
 import org.spongepowered.asm.mixin.Mixin;

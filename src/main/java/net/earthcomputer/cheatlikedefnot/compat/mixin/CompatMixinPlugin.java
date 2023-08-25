@@ -1,4 +1,4 @@
-package net.earthcomputer.cheatlikedefnot.compat;
+package net.earthcomputer.cheatlikedefnot.compat.mixin;
 
 import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CompatMixinPlugin implements IMixinConfigPlugin {
-    private static final String PACKAGE_PREFIX = "net.earthcomputer.cheatlikedefnot.compat.";
+    private static final String PACKAGE_PREFIX = "net.earthcomputer.cheatlikedefnot.compat.mixin.";
 
     @Override
     public void onLoad(String mixinPackage) {

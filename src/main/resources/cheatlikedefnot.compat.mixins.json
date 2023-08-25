@@ -1,15 +1,16 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.earthcomputer.cheatlikedefnot.compat",
+  "package": "net.earthcomputer.cheatlikedefnot.compat.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],
   "client": [
+    "clientcommands.FindItemCommandMixin",
     "tweakermore.ServerDataSyncerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
-  "plugin": "net.earthcomputer.cheatlikedefnot.compat.CompatMixinPlugin"
+  "plugin": "net.earthcomputer.cheatlikedefnot.compat.mixin.CompatMixinPlugin"
 }
