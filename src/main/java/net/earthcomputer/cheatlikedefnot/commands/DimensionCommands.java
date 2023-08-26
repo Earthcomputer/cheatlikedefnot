@@ -4,14 +4,14 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.command.TeleportCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -46,7 +46,7 @@ public class DimensionCommands {
 
     private static int changeDimension(ServerCommandSource source, ServerWorld destWorld) throws CommandSyntaxException {
         ServerPlayerEntity player = source.getPlayerOrThrow();
-        ServerWorld sourceWorld = player.getWorld();
+        ServerWorld sourceWorld = player.getServerWorld();
 
         if (sourceWorld == destWorld) {
             throw SAME_DIMENSION_EXCEPTION.create(destWorld.getRegistryKey().getValue());
@@ -54,9 +54,9 @@ public class DimensionCommands {
 
         Vec3d destPos = getDestPos(player, player.getPos(), sourceWorld, destWorld);
 
-        TeleportCommand.teleport(source, player, destWorld, destPos.x, destPos.y, destPos.z, EnumSet.noneOf(PlayerPositionLookS2CPacket.Flag.class), player.getYaw(), player.getPitch(), null);
+        TeleportCommand.teleport(source, player, destWorld, destPos.x, destPos.y, destPos.z, EnumSet.noneOf(PositionFlag.class), player.getYaw(), player.getPitch(), null);
 
-        source.sendFeedback(Text.literal("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
+        source.sendFeedback(() -> Text.literal("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
 
         return Command.SINGLE_SUCCESS;
     }
