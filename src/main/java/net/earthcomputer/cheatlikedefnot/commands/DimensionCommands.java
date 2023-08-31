@@ -11,6 +11,7 @@ import net.minecraft.server.command.TeleportCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
@@ -53,8 +54,9 @@ public class DimensionCommands {
         }
 
         Vec3d destPos = getDestPos(player, player.getPos(), sourceWorld, destWorld);
+        double destY = MathHelper.clamp(destPos.y, destWorld.getBottomY(), destWorld.getTopY());
 
-        TeleportCommand.teleport(source, player, destWorld, destPos.x, destPos.y, destPos.z, EnumSet.noneOf(PositionFlag.class), player.getYaw(), player.getPitch(), null);
+        TeleportCommand.teleport(source, player, destWorld, destPos.x, destY, destPos.z, EnumSet.noneOf(PositionFlag.class), player.getYaw(), player.getPitch(), null);
 
         source.sendFeedback(() -> Text.literal("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
 
