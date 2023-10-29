@@ -47,7 +47,7 @@ public class DimensionCommands {
 
     private static int changeDimension(ServerCommandSource source, ServerWorld destWorld) throws CommandSyntaxException {
         ServerPlayerEntity player = source.getPlayerOrThrow();
-        ServerWorld sourceWorld = player.getServerWorld();
+        ServerWorld sourceWorld = player.getWorld();
 
         if (sourceWorld == destWorld) {
             throw SAME_DIMENSION_EXCEPTION.create(destWorld.getRegistryKey().getValue());
@@ -58,7 +58,7 @@ public class DimensionCommands {
 
         TeleportCommand.teleport(source, player, destWorld, destPos.x, destY, destPos.z, EnumSet.noneOf(PositionFlag.class), player.getYaw(), player.getPitch(), null);
 
-        source.sendFeedback(() -> Text.literal("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
+        source.sendFeedback(Text.literal("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
 
         return Command.SINGLE_SUCCESS;
     }
