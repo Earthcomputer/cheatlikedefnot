@@ -19,7 +19,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -89,7 +88,7 @@ public class CLDFindItemTask extends SimpleTask {
             long startTime = System.nanoTime();
             if (scanningIterator == null) {
                 Vec3d cameraPos = cameraEntity.getCameraPosVec(0);
-                scanningIterator = BlockPos.iterateInSquare(new BlockPos(MathHelper.floor(cameraPos.x) >> 4, 0, MathHelper.floor(cameraPos.z) >> 4), MinecraftClient.getInstance().options.getViewDistance(), Direction.EAST, Direction.SOUTH).iterator();
+                scanningIterator = BlockPos.iterateInSquare(new BlockPos(MathHelper.floor(cameraPos.x) >> 4, 0, MathHelper.floor(cameraPos.z) >> 4), MinecraftClient.getInstance().options.getViewDistance().getValue(), Direction.EAST, Direction.SOUTH).iterator();
             }
             while (scanningIterator.hasNext()) {
                 BlockPos chunkPosAsBlockPos = scanningIterator.next();
@@ -228,11 +227,11 @@ public class CLDFindItemTask extends SimpleTask {
     private void printLocation(BlockPos pos, int count) {
         try {
             Class<?> clientCommandHelper = Class.forName("net.earthcomputer.clientcommands.command.ClientCommandHelper");
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new TranslatableText("commands.cfinditem.match.left", count, searchingForName)
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("commands.cfinditem.match.left", count, searchingForName)
                 .append((Text) clientCommandHelper.getMethod("getLookCoordsTextComponent", BlockPos.class).invoke(null, pos))
                 .append(" ")
-                .append((Text) clientCommandHelper.getMethod("getGlowCoordsTextComponent", MutableText.class, BlockPos.class).invoke(null, new TranslatableText("commands.cfindblock.success.glow"), pos))
-                .append(new TranslatableText("commands.cfinditem.match.right", count, searchingForName)));
+                .append((Text) clientCommandHelper.getMethod("getGlowCoordsTextComponent", MutableText.class, BlockPos.class).invoke(null, Text.translatable("commands.cfindblock.success.glow"), pos))
+                .append(Text.translatable("commands.cfinditem.match.right", count, searchingForName)));
         } catch (ReflectiveOperationException e) {
             LOGGER.error("Failed to print location", e);
         }
@@ -243,6 +242,6 @@ public class CLDFindItemTask extends SimpleTask {
         if (enderChestPosition != null && numItemsInEnderChest != null && numItemsInEnderChest > 0 && !hasPrintedEnderChest) {
             printLocation(enderChestPosition, numItemsInEnderChest);
         }
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new TranslatableText("commands.cfinditem.total", totalFound, searchingForName).formatted(Formatting.BOLD));
+        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("commands.cfinditem.total", totalFound, searchingForName).formatted(Formatting.BOLD));
     }
 }
