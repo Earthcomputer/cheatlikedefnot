@@ -4,8 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.command.TeleportCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -13,6 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -56,7 +56,7 @@ public class DimensionCommands {
         Vec3d destPos = getDestPos(player, player.getPos(), sourceWorld, destWorld);
         double destY = MathHelper.clamp(destPos.y, destWorld.getBottomY(), destWorld.getTopY());
 
-        TeleportCommand.teleport(source, player, destWorld, destPos.x, destY, destPos.z, EnumSet.noneOf(PositionFlag.class), player.getYaw(), player.getPitch(), null);
+        TeleportCommand.teleport(source, player, destWorld, destPos.x, destY, destPos.z, EnumSet.noneOf(PlayerPositionLookS2CPacket.Flag.class), player.getYaw(), player.getPitch(), null);
 
         source.sendFeedback(Text.literal("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
 
