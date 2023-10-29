@@ -9,7 +9,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.command.TeleportCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
@@ -24,7 +24,7 @@ import static net.minecraft.command.argument.DimensionArgumentType.*;
 import static net.minecraft.server.command.CommandManager.*;
 
 public class DimensionCommands {
-    private static final DynamicCommandExceptionType SAME_DIMENSION_EXCEPTION = new DynamicCommandExceptionType(dimension -> Text.literal("You are already in " + dimension + "!"));
+    private static final DynamicCommandExceptionType SAME_DIMENSION_EXCEPTION = new DynamicCommandExceptionType(dimension -> new LiteralText("You are already in " + dimension + "!"));
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         registerDtp(dispatcher, "dtp");
@@ -34,8 +34,7 @@ public class DimensionCommands {
     private static void registerDtp(CommandDispatcher<ServerCommandSource> dispatcher, String name) {
         dispatcher.register(literal(name)
             .requires(source -> {
-                ServerPlayerEntity player = source.getPlayer();
-                if (player == null) {
+                if (!(source.getEntity() instanceof ServerPlayerEntity player)) {
                     return true;
                 }
                 GameMode gameMode = player.interactionManager.getGameMode();
@@ -46,7 +45,7 @@ public class DimensionCommands {
     }
 
     private static int changeDimension(ServerCommandSource source, ServerWorld destWorld) throws CommandSyntaxException {
-        ServerPlayerEntity player = source.getPlayerOrThrow();
+        ServerPlayerEntity player = source.getPlayer();
         ServerWorld sourceWorld = player.getWorld();
 
         if (sourceWorld == destWorld) {
@@ -58,7 +57,7 @@ public class DimensionCommands {
 
         TeleportCommand.teleport(source, player, destWorld, destPos.x, destY, destPos.z, EnumSet.noneOf(PlayerPositionLookS2CPacket.Flag.class), player.getYaw(), player.getPitch(), null);
 
-        source.sendFeedback(Text.literal("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
+        source.sendFeedback(new LiteralText("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
 
         return Command.SINGLE_SUCCESS;
     }

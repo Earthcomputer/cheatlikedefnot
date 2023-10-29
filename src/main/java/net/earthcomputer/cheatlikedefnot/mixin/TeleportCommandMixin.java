@@ -8,7 +8,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.command.TeleportCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
 import net.minecraft.world.GameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -22,7 +22,7 @@ import java.util.Set;
 @Mixin(TeleportCommand.class)
 public class TeleportCommandMixin {
     @Unique
-    private static final SimpleCommandExceptionType OTHER_ENTITY_EXCEPTION = new SimpleCommandExceptionType(Text.literal("You can't teleport other entities"));
+    private static final SimpleCommandExceptionType OTHER_ENTITY_EXCEPTION = new SimpleCommandExceptionType(new LiteralText("You can't teleport other entities"));
 
     @Inject(method = {"method_13764", "method_13763"}, at = @At("HEAD"), cancellable = true)
     private static void changeRequirement(ServerCommandSource source, CallbackInfoReturnable<Boolean> cir) {
