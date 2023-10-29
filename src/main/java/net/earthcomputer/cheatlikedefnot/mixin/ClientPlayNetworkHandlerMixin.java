@@ -19,7 +19,7 @@ public class ClientPlayNetworkHandlerMixin implements CLDDataQueryHandler.IClien
         return cheatlikedefnot_cldDataQueryHandler;
     }
 
-    @Inject(method = "onNbtQueryResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
+    @Inject(method = "onNbtQueryResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/util/thread/ThreadExecutor;)V", shift = At.Shift.AFTER), cancellable = true)
     private void onOnNbtQueryResponse(NbtQueryResponseS2CPacket packet, CallbackInfo ci) {
         if (cheatlikedefnot_cldDataQueryHandler.handleQueryResponse(packet.getTransactionId(), packet.getNbt())) {
             ci.cancel();

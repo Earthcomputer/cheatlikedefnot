@@ -3,7 +3,7 @@ package net.earthcomputer.cheatlikedefnot.mixin;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.command.TeleportCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -34,7 +34,7 @@ public class TeleportCommandMixin {
     }
 
     @Inject(method = "teleport", at = @At("HEAD"))
-    private static void preventSpectatorsTeleportingOthers(ServerCommandSource source, Entity target, ServerWorld world, double x, double y, double z, Set<PlayerPositionLookS2CPacket.Flag> movementFlags, float yaw, float pitch, TeleportCommand.LookTarget facingLocation, CallbackInfo ci) throws CommandSyntaxException {
+    private static void preventSpectatorsTeleportingOthers(ServerCommandSource source, Entity target, ServerWorld world, double x, double y, double z, Set<PositionFlag> movementFlags, float yaw, float pitch, TeleportCommand.LookTarget facingLocation, CallbackInfo ci) throws CommandSyntaxException {
         if (source.hasPermissionLevel(2)) {
             return;
         }
