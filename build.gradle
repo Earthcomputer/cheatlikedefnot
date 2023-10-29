@@ -1,9 +1,10 @@
 plugins {
     id 'fabric-loom' version '1.0-SNAPSHOT'
     id 'maven-publish'
+    id 'com.modrinth.minotaur' version '2.+'
 }
 
-version = project.mod_version
+version = "${project.mod_version}+mc${project.minecraft_version}"
 group = project.maven_group
 
 sourceSets {
@@ -69,6 +70,21 @@ java {
 jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
+    }
+}
+
+modrinth {
+    if (System.getenv('MODRINTH_TOKEN') == null && project.hasProperty('modrinthKey')) {
+        token = project.modrinthKey
+    }
+    projectId = 'cheatlikedefnot'
+    uploadFile = remapJar
+    gameVersions = [project.minecraft_version]
+    loaders = ['fabric', 'quilt']
+    dependencies {
+        required.project 'fabric-api'
+        optional.project 'client-commands'
+        optional.project 'tweakermore'
     }
 }
 
