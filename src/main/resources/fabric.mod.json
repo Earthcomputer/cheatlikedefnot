@@ -16,6 +16,9 @@
   "entrypoints": {
     "main": [
       "net.earthcomputer.cheatlikedefnot.CheatLikeDefnot"
+    ],
+    "client": [
+      "net.earthcomputer.cheatlikedefnot.CheatLikeDefnotClient"
     ]
   },
   "mixins": [
