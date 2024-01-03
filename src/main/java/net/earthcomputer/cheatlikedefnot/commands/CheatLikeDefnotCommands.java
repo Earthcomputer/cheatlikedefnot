@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import net.earthcomputer.cheatlikedefnot.CheatLikeDefnot;
 import net.earthcomputer.cheatlikedefnot.Rules;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.PlayerManager;
@@ -68,6 +69,7 @@ public class CheatLikeDefnotCommands {
         Rules.RuleInstance ruleInstance = getRule(rule);
         ruleInstance.set(value);
         Rules.save();
+        CheatLikeDefnot.syncRules(source.getServer());
         source.sendFeedback(() -> Text.literal(rule + " has been updated to " + value), true);
 
         // re-send command trees as command permissions may have changed
