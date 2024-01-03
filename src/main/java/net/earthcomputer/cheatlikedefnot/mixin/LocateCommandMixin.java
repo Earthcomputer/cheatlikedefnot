@@ -1,5 +1,6 @@
 package net.earthcomputer.cheatlikedefnot.mixin;
 
+import net.earthcomputer.cheatlikedefnot.Rules;
 import net.minecraft.server.command.LocateCommand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -9,6 +10,6 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class LocateCommandMixin {
     @ModifyConstant(method = "method_13448", constant = @Constant(intValue = 2))
     private static int modifyPermissionLevel(int permissionLevel) {
-        return 0;
+        return Rules.locateCommand ? 0 : permissionLevel;
     }
 }

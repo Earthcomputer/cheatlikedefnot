@@ -2,6 +2,7 @@ package net.earthcomputer.cheatlikedefnot.mixin;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import net.earthcomputer.cheatlikedefnot.Rules;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.command.ServerCommandSource;
@@ -26,7 +27,7 @@ public class TeleportCommandMixin {
 
     @Inject(method = {"method_13764", "method_13763"}, at = @At("HEAD"), cancellable = true)
     private static void changeRequirement(ServerCommandSource source, CallbackInfoReturnable<Boolean> cir) {
-        if (source.getEntity() instanceof ServerPlayerEntity player) {
+        if (Rules.spectatorTeleport && source.getEntity() instanceof ServerPlayerEntity player) {
             if (player.interactionManager.getGameMode() == GameMode.SPECTATOR) {
                 cir.setReturnValue(true);
             }
