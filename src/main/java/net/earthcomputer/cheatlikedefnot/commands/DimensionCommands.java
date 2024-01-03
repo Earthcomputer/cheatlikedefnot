@@ -4,12 +4,15 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import net.earthcomputer.cheatlikedefnot.Rules;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.command.TeleportCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
@@ -34,6 +37,9 @@ public class DimensionCommands {
     private static void registerDtp(CommandDispatcher<ServerCommandSource> dispatcher, String name) {
         dispatcher.register(literal(name)
             .requires(source -> {
+                if (!Rules.dtpCommand && !source.hasPermissionLevel(2)) {
+                    return false;
+                }
                 if (!(source.getEntity() instanceof ServerPlayerEntity player)) {
                     return true;
                 }
@@ -55,9 +61,12 @@ public class DimensionCommands {
         Vec3d destPos = getDestPos(player, player.getPos(), sourceWorld, destWorld);
         double destY = MathHelper.clamp(destPos.y, destWorld.getBottomY(), destWorld.getTopY());
 
-        TeleportCommand.teleport(source, player, destWorld, destPos.x, destY, destPos.z, EnumSet.noneOf(PlayerPositionLookS2CPacket.Flag.class), player.getYaw(), player.getPitch(), null);
-
-        source.sendFeedback(new LiteralText("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
+        if (!Rules.dtpPreventChunkGeneration || destWorld.getChunkManager().threadedAnvilChunkStorage.isLevelChunk(new ChunkPos(new BlockPos(destPos)))) {
+            TeleportCommand.teleport(source, player, destWorld, destPos.x, destY, destPos.z, EnumSet.noneOf(PlayerPositionLookS2CPacket.Flag.class), player.getYaw(), player.getPitch(), null);
+            source.sendFeedback(new LiteralText("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
+        } else {
+            source.sendError(new LiteralText("Cannot teleport to ungenerated chunks"));
+        }
 
         return Command.SINGLE_SUCCESS;
     }
