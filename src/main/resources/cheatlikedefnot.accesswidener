@@ -1,3 +1,4 @@
 accessWidener v1 named
 accessible class net/minecraft/server/command/TeleportCommand$LookTarget
 accessible method net/minecraft/server/command/TeleportCommand teleport (Lnet/minecraft/server/command/ServerCommandSource;Lnet/minecraft/entity/Entity;Lnet/minecraft/server/world/ServerWorld;DDDLjava/util/Set;FFLnet/minecraft/server/command/TeleportCommand$LookTarget;)V
+accessible method net/minecraft/server/world/ThreadedAnvilChunkStorage isLevelChunk (Lnet/minecraft/util/math/ChunkPos;)Z
