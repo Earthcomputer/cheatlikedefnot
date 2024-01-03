@@ -3,7 +3,8 @@ package net.earthcomputer.cheatlikedefnot.compat.mixin.clientcommands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.logging.LogUtils;
-import net.earthcomputer.cheatlikedefnot.CheatLikeDefnot;
+import net.earthcomputer.cheatlikedefnot.CheatLikeDefnotClient;
+import net.earthcomputer.cheatlikedefnot.Rules;
 import net.earthcomputer.cheatlikedefnot.compat.clientcommands.CLDFindItemTask;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.item.ItemStack;
@@ -24,7 +25,10 @@ import java.util.function.Predicate;
 public class FindItemCommandMixin {
     @Inject(method = "findItem", at = @At("HEAD"), cancellable = true)
     private static void onFindItem(CommandContext<FabricClientCommandSource> ctx, boolean noSearchShulkerBox, boolean keepSearching, Pair<String, Predicate<ItemStack>> item, CallbackInfoReturnable<Integer> cir) {
-        if (!CheatLikeDefnot.isCheatLikeDefnotOnServer()) {
+        if (!CheatLikeDefnotClient.isCheatLikeDefnotOnServer()) {
+            return;
+        }
+        if (!Rules.nonOpBlockNbtQueries || !Rules.nonOpEntityNbtQueries) {
             return;
         }
 
