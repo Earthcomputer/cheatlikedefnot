@@ -74,6 +74,9 @@ public final class Rules {
     @Rule(defaultValue = true, description = "Enables the entity NBT query packet for everyone")
     public static boolean nonOpEntityNbtQueries;
 
+    @Rule(defaultValue = true, description = "Removes the size limit on NBT query packets")
+    public static boolean removeNbtQuerySizeLimit;
+
     @Rule(defaultValue = true, description = "Enables spectators to use the /tp command to teleport to arbitrary coordinates")
     public static boolean spectatorTeleport;
 
