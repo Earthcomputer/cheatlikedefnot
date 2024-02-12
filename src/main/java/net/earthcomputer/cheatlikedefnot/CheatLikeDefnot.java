@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.networking.v1.S2CPlayChannelEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtTagSizeTracker;
+import net.minecraft.nbt.NbtSizeTracker;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -67,7 +67,7 @@ public class CheatLikeDefnot implements ModInitializer {
 
     @Nullable
     public static NbtCompound readUnlimitedNbt(PacketByteBuf buf) {
-        NbtElement nbt = buf.readNbt(NbtTagSizeTracker.ofUnlimitedBytes());
+        NbtElement nbt = buf.readNbt(NbtSizeTracker.ofUnlimitedBytes());
         if (nbt != null && !(nbt instanceof NbtCompound)) {
             throw new DecoderException("Not a compound tag: " + nbt);
         }
