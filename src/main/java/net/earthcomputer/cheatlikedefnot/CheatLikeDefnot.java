@@ -1,6 +1,7 @@
 package net.earthcomputer.cheatlikedefnot;
 
 import com.mojang.brigadier.CommandDispatcher;
+import io.netty.handler.codec.DecoderException;
 import net.earthcomputer.cheatlikedefnot.commands.CheatLikeDefnotCommands;
 import net.earthcomputer.cheatlikedefnot.commands.DimensionCommands;
 import net.fabricmc.api.ModInitializer;
@@ -10,11 +11,15 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.S2CPlayChannelEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtTagSizeTracker;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,5 +63,14 @@ public class CheatLikeDefnot implements ModInitializer {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeMap(rules, PacketByteBuf::writeString, PacketByteBuf::writeBoolean);
         sender.sendPacket(RULE_UPDATE_PACKET, buf);
+    }
+
+    @Nullable
+    public static NbtCompound readUnlimitedNbt(PacketByteBuf buf) {
+        NbtElement nbt = buf.readNbt(NbtTagSizeTracker.ofUnlimitedBytes());
+        if (nbt != null && !(nbt instanceof NbtCompound)) {
+            throw new DecoderException("Not a compound tag: " + nbt);
+        }
+        return (NbtCompound) nbt;
     }
 }
