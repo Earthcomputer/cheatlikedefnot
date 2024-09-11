@@ -73,7 +73,6 @@ public class CheatLikeDefnot implements ModInitializer {
         S2CPlayChannelEvents.REGISTER.register((handler, sender, server, channels) -> {
             if (channels.contains(RULE_UPDATE_PACKET_ID)) {
                 syncRules(sender);
-                System.out.println("Synced rules");
             }
         });
     }
