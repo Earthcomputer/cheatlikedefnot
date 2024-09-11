@@ -11,8 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerInteractionManager.class)
 public class ServerPlayerInteractionManagerMixin {
-    @Shadow @Final protected ServerPlayerEntity player;
+    @Shadow
+    @Final
+    protected ServerPlayerEntity player;
 
+    // needed to update the available commands on GameModeChange(dtp)
     @Inject(method = "setGameMode", at = @At("RETURN"))
     protected void onSetGameMode(CallbackInfo ci) {
         if (this.player.networkHandler != null) { // can be null on server startup

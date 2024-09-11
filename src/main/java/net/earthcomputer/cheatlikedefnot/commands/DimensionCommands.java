@@ -62,7 +62,7 @@ public class DimensionCommands {
         Vec3d destPos = getDestPos(player, player.getPos(), sourceWorld, destWorld);
         double destY = MathHelper.clamp(destPos.y, destWorld.getBottomY(), destWorld.getTopY());
 
-        if (!Rules.dtpPreventChunkGeneration || destWorld.getChunkManager().threadedAnvilChunkStorage.isLevelChunk(new ChunkPos(BlockPos.ofFloored(destPos)))) {
+        if (!Rules.dtpPreventChunkGeneration || destWorld.getChunkManager().chunkLoadingManager.isLevelChunk(new ChunkPos(BlockPos.ofFloored(destPos)))) {
             TeleportCommand.teleport(source, player, destWorld, destPos.x, destY, destPos.z, EnumSet.noneOf(PositionFlag.class), player.getYaw(), player.getPitch(), null);
             source.sendFeedback(() -> Text.literal("You have been teleported to " + destWorld.getRegistryKey().getValue()), true);
         } else {

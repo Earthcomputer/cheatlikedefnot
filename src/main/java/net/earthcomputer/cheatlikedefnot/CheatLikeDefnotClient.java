@@ -1,14 +1,15 @@
 package net.earthcomputer.cheatlikedefnot;
 
+import net.earthcomputer.cheatlikedefnot.packets.RuleUpdatePacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.network.PacketByteBuf;
 
 import java.util.Map;
 
 public class CheatLikeDefnotClient implements ClientModInitializer {
     public static boolean isCheatLikeDefnotOnServer() {
+        System.out.println("Checking if cheatlikedefnot is on server " + ClientPlayNetworking.canSend(CheatLikeDefnot.CHEATLIKEDEFNOT_MARKER));
         return ClientPlayNetworking.canSend(CheatLikeDefnot.CHEATLIKEDEFNOT_MARKER);
     }
 
@@ -23,13 +24,14 @@ public class CheatLikeDefnotClient implements ClientModInitializer {
                 }
             });
         });
-        ClientPlayNetworking.registerGlobalReceiver(CheatLikeDefnot.RULE_UPDATE_PACKET, (client, handler, buf, responseSender) -> {
-            client.execute(() -> {
-                if (!client.isIntegratedServerRunning()) {
-                    Map<String, Boolean> serverRules = buf.readMap(buf1 -> buf1.readString(256), PacketByteBuf::readBoolean);
+        ClientPlayNetworking.registerGlobalReceiver(RuleUpdatePacket.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                if (!context.client().isIntegratedServerRunning()) {
+                    Map<String, Boolean> serverRules = payload.rules();
                     for (Rules.RuleInstance rule : Rules.getRules()) {
                         rule.set(serverRules.getOrDefault(rule.name(), rule.metadata().defaultValue()));
                     }
+                    System.out.println("Received rule update from server");
                 }
             });
         });
