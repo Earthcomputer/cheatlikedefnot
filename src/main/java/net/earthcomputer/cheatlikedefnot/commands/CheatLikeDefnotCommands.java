@@ -11,7 +11,6 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -23,7 +22,7 @@ import static net.minecraft.server.command.CommandManager.*;
 
 public class CheatLikeDefnotCommands {
     private static final SuggestionProvider<ServerCommandSource> RULE_COMPLETION = (context, builder) -> CommandSource.suggestMatching(Arrays.stream(Rules.getRules()).map(Rules.RuleInstance::name), builder);
-    private static final DynamicCommandExceptionType NO_SUCH_RULE_EXCEPTION = new DynamicCommandExceptionType(rule -> new LiteralText("No such rule: " + rule));
+    private static final DynamicCommandExceptionType NO_SUCH_RULE_EXCEPTION = new DynamicCommandExceptionType(rule -> Text.literal("No such rule: " + rule));
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("cheatlikedefnot")
@@ -47,7 +46,7 @@ public class CheatLikeDefnotCommands {
 
     private static int listRules(ServerCommandSource source) {
         for (Rules.RuleInstance rule : Rules.getRules()) {
-            source.sendFeedback(ruleValueOutput(rule), false);
+            source.sendFeedback(() -> ruleValueOutput(rule), false);
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -55,13 +54,14 @@ public class CheatLikeDefnotCommands {
     private static int explainRule(ServerCommandSource source, String rule) throws CommandSyntaxException {
         System.out.println("Explaining rule " + rule);
         Rules.RuleInstance ruleInstance = getRule(rule);
-        source.sendFeedback(new LiteralText(ruleInstance.name()).styled(style -> style.withUnderline(true)), false);
-        source.sendFeedback(new LiteralText(ruleInstance.metadata().description()), false);
+        source.sendFeedback(() -> Text.literal(ruleInstance.name()).styled(style -> style.withUnderline(true)), false);
+        source.sendFeedback(() -> Text.literal(ruleInstance.metadata().description()), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int getRule(ServerCommandSource source, String rule) throws CommandSyntaxException {
-        source.sendFeedback(ruleValueOutput(getRule(rule)), false);
+        Rules.RuleInstance ruleInstance = getRule(rule);
+        source.sendFeedback(() -> ruleValueOutput(ruleInstance), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -70,7 +70,7 @@ public class CheatLikeDefnotCommands {
         ruleInstance.set(value);
         Rules.save();
         CheatLikeDefnot.syncRules(source.getServer());
-        source.sendFeedback(new LiteralText(rule + " has been updated to " + value), true);
+        source.sendFeedback(() -> Text.literal(rule + " has been updated to " + value), true);
 
         // re-send command trees as command permissions may have changed
         PlayerManager playerManager = source.getServer().getPlayerManager();
@@ -82,12 +82,12 @@ public class CheatLikeDefnotCommands {
     }
 
     private static Text ruleValueOutput(Rules.RuleInstance rule) {
-        return new LiteralText("")
-            .append(new LiteralText(rule.name()).styled(style -> style.withBold(true)))
+        return Text.literal("")
+            .append(Text.literal(rule.name()).styled(style -> style.withBold(true)))
             .append(" = ")
-            .append(new LiteralText(Boolean.toString(rule.get()))
+            .append(Text.literal(Boolean.toString(rule.get()))
                 .styled(style -> style.withColor(Formatting.GRAY).withItalic(rule.get() != rule.metadata().defaultValue())))
-            .append(new LiteralText(" [default: " + rule.metadata().defaultValue() + "]")
+            .append(Text.literal(" [default: " + rule.metadata().defaultValue() + "]")
                 .styled(style -> style.withColor(Formatting.DARK_GRAY)));
     }
 
