@@ -27,7 +27,7 @@
   ],
   "accessWidener": "cheatlikedefnot.accesswidener",
   "depends": {
-    "minecraft": "1.20.4",
+    "minecraft": "${mcversion}",
     "fabricloader": ">=0.15",
     "fabric-api": "*"
   }
