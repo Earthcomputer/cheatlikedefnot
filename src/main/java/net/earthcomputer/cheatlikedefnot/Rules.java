@@ -80,6 +80,9 @@ public final class Rules {
     @Rule(defaultValue = true, description = "Enables spectators to use the /tp command to teleport to arbitrary coordinates")
     public static boolean spectatorTeleport;
 
+    @Rule(defaultValue = true, description = "Enables the /data get command for everyone")
+    public static boolean dataGetCommand;
+
     public static void load() {
         RuleInstance[] rules = getRules();
         for (RuleInstance rule : rules) {
