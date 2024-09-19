@@ -6,7 +6,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
 public final class MarkerPayload implements CustomPayload {
-    public static final Id<MarkerPayload> ID = new Id<>(new Identifier("cheatlikedefnot", "marker"));
+    public static final Id<MarkerPayload> ID = new Id<>(Identifier.of("cheatlikedefnot", "marker"));
     public static final MarkerPayload INSTANCE = new MarkerPayload();
     public static final PacketCodec<RegistryByteBuf, MarkerPayload> CODEC = PacketCodec.unit(INSTANCE);
 

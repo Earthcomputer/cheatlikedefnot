@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.IntFunction;
 
 public record RuleUpdatePayload(Map<String, Boolean> rules) implements CustomPayload {
-    public static final Id<RuleUpdatePayload> ID = new Id<>(new Identifier("cheatlikedefnot", "rule_update"));
+    public static final Id<RuleUpdatePayload> ID = new Id<>(Identifier.of("cheatlikedefnot", "rule_update"));
     public static final PacketCodec<RegistryByteBuf, RuleUpdatePayload> CODEC = PacketCodecs.map(
         (IntFunction<Map<String, Boolean>>) HashMap::new,
         PacketCodecs.string(256),
