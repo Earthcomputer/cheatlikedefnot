@@ -39,7 +39,7 @@ processResources {
     filteringCharset "UTF-8"
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand "version": project.version, "mcversion": project.minecraft_version_dependency
     }
 }
 
@@ -79,7 +79,7 @@ modrinth {
     }
     projectId = 'cheatlikedefnot'
     uploadFile = remapJar
-    gameVersions = [project.minecraft_version]
+    gameVersions = project.minecraft_version_list.split('\\s*,\\s*').toList()
     loaders = ['fabric', 'quilt']
     dependencies {
         required.project 'fabric-api'
