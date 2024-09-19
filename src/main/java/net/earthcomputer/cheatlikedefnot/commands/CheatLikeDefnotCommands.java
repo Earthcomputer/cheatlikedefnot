@@ -52,7 +52,6 @@ public class CheatLikeDefnotCommands {
     }
 
     private static int explainRule(ServerCommandSource source, String rule) throws CommandSyntaxException {
-        System.out.println("Explaining rule " + rule);
         Rules.RuleInstance ruleInstance = getRule(rule);
         source.sendFeedback(Text.literal(ruleInstance.name()).styled(style -> style.withUnderline(true)), false);
         source.sendFeedback(Text.literal(ruleInstance.metadata().description()), false);
