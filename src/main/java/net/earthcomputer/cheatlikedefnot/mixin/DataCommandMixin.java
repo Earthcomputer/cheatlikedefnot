@@ -20,7 +20,7 @@ public class DataCommandMixin {
         return Rules.dataGetCommand ? 0 : permissionLevel;
     }
 
-    @WrapOperation(method = "register", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/builder/LiteralArgumentBuilder;then(Lcom/mojang/brigadier/builder/ArgumentBuilder;)Lcom/mojang/brigadier/builder/ArgumentBuilder;"))
+    @WrapOperation(method = "register", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/builder/LiteralArgumentBuilder;then(Lcom/mojang/brigadier/builder/ArgumentBuilder;)Lcom/mojang/brigadier/builder/ArgumentBuilder;", remap = false))
     private static <T1 extends ArgumentBuilder<ServerCommandSource, T1>> ArgumentBuilder<ServerCommandSource, T1> modifySubPermissionLevel(
         LiteralArgumentBuilder<ServerCommandSource> instance,
         ArgumentBuilder<ServerCommandSource, ?> argumentBuilder,
