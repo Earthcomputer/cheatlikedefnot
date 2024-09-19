@@ -4,6 +4,7 @@
   "package": "net.earthcomputer.cheatlikedefnot.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "DataCommandMixin",
     "LocateCommandMixin",
     "NbtQueryResponseS2CPacketMixin",
     "ServerPlayerInteractionManagerMixin",
