@@ -4,9 +4,11 @@ import com.mojang.brigadier.CommandDispatcher;
 import io.netty.handler.codec.DecoderException;
 import net.earthcomputer.cheatlikedefnot.commands.CheatLikeDefnotCommands;
 import net.earthcomputer.cheatlikedefnot.commands.DimensionCommands;
+import net.earthcomputer.cheatlikedefnot.network.MarkerPayload;
+import net.earthcomputer.cheatlikedefnot.network.RuleUpdatePayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.nbt.NbtCompound;
@@ -16,22 +18,20 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CheatLikeDefnot implements ModInitializer {
-    public static final Identifier CHEATLIKEDEFNOT_MARKER = new Identifier("cheatlikedefnot", "marker");
-    public static final Identifier RULE_UPDATE_PACKET = new Identifier("cheatlikedefnot", "rule_update");
-
     @Override
     public void onInitialize() {
         Rules.load();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> registerCommands(dispatcher));
 
-        ServerPlayNetworking.registerGlobalReceiver(CHEATLIKEDEFNOT_MARKER, (server, player, handler, buf, responseSender) -> {});
+        PayloadTypeRegistry.playC2S().register(MarkerPayload.ID, MarkerPayload.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MarkerPayload.ID, (payload, context) -> {});
+        PayloadTypeRegistry.playS2C().register(RuleUpdatePayload.ID, RuleUpdatePayload.CODEC);
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> syncRules(handler.player));
     }
@@ -48,7 +48,7 @@ public class CheatLikeDefnot implements ModInitializer {
     }
 
     public static void syncRules(ServerPlayerEntity player) {
-        if (!ServerPlayNetworking.canSend(player, RULE_UPDATE_PACKET)) {
+        if (!ServerPlayNetworking.canSend(player, RuleUpdatePayload.ID)) {
             return;
         }
 
@@ -56,9 +56,7 @@ public class CheatLikeDefnot implements ModInitializer {
         for (Rules.RuleInstance rule : Rules.getRules()) {
             rules.put(rule.name(), rule.get());
         }
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeMap(rules, PacketByteBuf::writeString, PacketByteBuf::writeBoolean);
-        ServerPlayNetworking.send(player, RULE_UPDATE_PACKET, buf);
+        ServerPlayNetworking.send(player, new RuleUpdatePayload(rules));
     }
 
     @Nullable
